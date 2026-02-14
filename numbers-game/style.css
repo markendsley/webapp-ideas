@@ -376,6 +376,83 @@ body {
     background-clip: text;
 }
 
+/* Player Overlay */
+.player-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1e1e2e;
+    padding: 0.5rem 1rem;
+}
+
+.overlay-players {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.overlay-pip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.overlay-pip .pip-name {
+    font-weight: 600;
+    color: #e0e0e0;
+    max-width: 7rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overlay-pip .pip-score {
+    color: #818cf8;
+    font-weight: 700;
+}
+
+.overlay-pip .pip-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #333;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.overlay-pip .pip-status.answered {
+    background: #34d399;
+    box-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
+}
+
+.overlay-pip .pip-status.waiting {
+    background: #4a4a5a;
+}
+
+.overlay-pip.is-me {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+}
+
+/* Push screen content down when overlay is visible */
+body:has(.player-overlay:not(.hidden)) .screen {
+    padding-top: 4rem;
+}
+
 /* Responsive */
 @media (max-width: 500px) {
     .logo {

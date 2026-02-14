@@ -45,6 +45,10 @@ let currentRound = 0;
 let answers = {};        // peerId -> number (for current round)
 let roundTimer = null;
 
+// Overlay state — tracks who has answered in the current round
+let overlayData = []; // [{ id, name, score, isHost, answered }]
+let cachedPlayerList = []; // client-side cache of player list from host
+
 // ---- DOM ----
 const $ = (id) => document.getElementById(id);
 
@@ -59,6 +63,43 @@ const screens = {
 function showScreen(name) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
     screens[name].classList.add('active');
+
+    // Show overlay during question and results screens
+    const showOverlay = (name === 'question' || name === 'results');
+    $('player-overlay').classList.toggle('hidden', !showOverlay);
+}
+
+// ---- Player Overlay ----
+function buildOverlayData(answeredSet) {
+    const list = isHost ? getFullPlayerList() : cachedPlayerList;
+    overlayData = list.map(p => ({
+        id: p.id,
+        name: p.name,
+        score: p.score || 0,
+        isHost: p.isHost,
+        answered: answeredSet ? answeredSet.has(p.id) : false,
+    }));
+}
+
+function renderOverlay() {
+    const container = $('overlay-players');
+    container.innerHTML = '';
+    overlayData.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'overlay-pip' + (p.id === myId ? ' is-me' : '');
+        div.innerHTML = `
+            <span class="pip-status ${p.answered ? 'answered' : 'waiting'}"></span>
+            <span class="pip-name">${escapeHtml(p.name)}</span>
+            <span class="pip-score">${formatNumber(p.score)}</span>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function markOverlayAnswered(playerId) {
+    const p = overlayData.find(d => d.id === playerId);
+    if (p) p.answered = true;
+    renderOverlay();
 }
 
 // ---- Utilities ----
@@ -177,7 +218,9 @@ function handleHostMessage(conn, data) {
         case 'answer':
             if (answers[conn.peer] === undefined) {
                 answers[conn.peer] = data.value;
-                // Check if all answered
+                // Update overlay locally and broadcast status
+                markOverlayAnswered(conn.peer);
+                broadcastAnswerStatus();
                 checkAllAnswered();
             }
             break;
@@ -188,6 +231,13 @@ function broadcastPlayerList() {
     const list = getPlayerList();
     Object.values(connections).forEach(conn => {
         conn.send({ type: 'player-list', players: list });
+    });
+}
+
+function broadcastAnswerStatus() {
+    const answeredIds = Object.keys(answers);
+    Object.values(connections).forEach(conn => {
+        conn.send({ type: 'answer-status', answeredIds });
     });
 }
 
@@ -254,6 +304,10 @@ function hostStartRound() {
         });
     });
 
+    // Build overlay with no one answered yet
+    buildOverlayData(new Set());
+    renderOverlay();
+
     // Show question screen for host
     showQuestionScreen(q, currentRound + 1, gameQuestions.length);
     startTimer(ROUND_TIME, () => hostEndRound());
@@ -309,6 +363,9 @@ function hostEndRound() {
             isLastRound,
         });
     });
+
+    // Broadcast updated player list with new scores so client overlay stays current
+    broadcastPlayerList();
 
     showResultsScreen(q.answer, q.unit, results, isLastRound);
     currentRound++;
@@ -398,6 +455,7 @@ function handleClientMessage(data) {
             break;
 
         case 'player-list':
+            cachedPlayerList = data.players;
             renderPlayerList(data.players);
             break;
 
@@ -406,6 +464,9 @@ function handleClientMessage(data) {
             break;
 
         case 'question':
+            // Build overlay from the player list we have cached
+            buildOverlayData(new Set());
+            renderOverlay();
             showQuestionScreen(
                 { question: data.question, unit: data.unit },
                 data.round,
@@ -416,6 +477,15 @@ function handleClientMessage(data) {
                 setStatus('answer-status', "Time's up!");
                 $('btn-submit-answer').disabled = true;
             });
+            break;
+
+        case 'answer-status':
+            // Update overlay with who has answered
+            if (data.answeredIds) {
+                const set = new Set(data.answeredIds);
+                overlayData.forEach(p => p.answered = set.has(p.id));
+                renderOverlay();
+            }
             break;
 
         case 'round-results':
@@ -437,9 +507,13 @@ function handleClientMessage(data) {
 function sendAnswer(value) {
     if (isHost) {
         answers[myId] = value;
+        markOverlayAnswered(myId);
+        broadcastAnswerStatus();
         checkAllAnswered();
     } else if (hostConn) {
         hostConn.send({ type: 'answer', value });
+        // Optimistically mark self as answered
+        markOverlayAnswered(myId);
     }
 }
 
@@ -491,6 +565,16 @@ function startTimer(seconds, onEnd) {
 }
 
 function showResultsScreen(answer, unit, results, isLastRound) {
+    // Update overlay scores from results
+    results.forEach(r => {
+        const p = overlayData.find(d => d.name === r.name);
+        if (p) {
+            p.score = r.totalScore;
+            p.answered = false; // reset for display on results screen
+        }
+    });
+    renderOverlay();
+
     showScreen('results');
     $('results-title').textContent = 'Round Results';
     $('real-answer').textContent = formatNumber(answer) + (unit ? ' ' + unit : '');
