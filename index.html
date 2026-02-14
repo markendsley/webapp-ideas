@@ -3,10 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web App Ideas</title>
+    <title>Mark's Web Apps</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            margin-top: 0.75rem;
+            font-size: 1.1rem;
+            color: #64748b;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: #333;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-card .thumbnail {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .project-card .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-card .thumbnail .placeholder {
+            font-size: 3rem;
+            opacity: 0.15;
+        }
+
+        .project-card .info {
+            padding: 1.25rem 1.5rem 1.5rem;
+        }
+
+        .project-card .info h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f1f5f9;
+        }
+
+        .project-card .info p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #64748b;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+        }
+
+        @media (max-width: 700px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>Your blank slate is ready. Start building!</p>
+    <header>
+        <h1>Mark E.</h1>
+        <p>Web apps &amp; experiments</p>
+    </header>
+
+    <main>
+        <div class="projects-grid">
+
+            <a class="project-card" href="#">
+                <div class="thumbnail">
+                    <span class="placeholder">&#9670;</span>
+                </div>
+                <div class="info">
+                    <h2>Project Alpha</h2>
+                    <p>A sleek dashboard for tracking daily habits and building streaks.</p>
+                    <span class="badge">Coming Soon</span>
+                </div>
+            </a>
+
+            <a class="project-card" href="#">
+                <div class="thumbnail">
+                    <span class="placeholder">&#9678;</span>
+                </div>
+                <div class="info">
+                    <h2>Project Beta</h2>
+                    <p>Real-time markdown editor with live preview and cloud sync.</p>
+                    <span class="badge">Coming Soon</span>
+                </div>
+            </a>
+
+            <a class="project-card" href="#">
+                <div class="thumbnail">
+                    <span class="placeholder">&#9700;</span>
+                </div>
+                <div class="info">
+                    <h2>Project Gamma</h2>
+                    <p>Interactive data visualization tool for exploring public datasets.</p>
+                    <span class="badge">Coming Soon</span>
+                </div>
+            </a>
+
+        </div>
+    </main>
 </body>
 </html>
