@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numbers Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" defer></script>
+    <script src="game.js" defer></script>
+</head>
+<body>
+    <!-- Home Screen -->
+    <div id="screen-home" class="screen active">
+        <div class="container">
+            <h1 class="logo">#Numbers</h1>
+            <p class="tagline">Guess the number. Beat your friends.</p>
+            <div class="home-actions">
+                <button id="btn-create" class="btn btn-primary">Create Game</button>
+                <div class="divider"><span>or</span></div>
+                <div class="join-row">
+                    <input type="text" id="input-room-code" class="input" placeholder="Room code" maxlength="4" autocomplete="off">
+                    <button id="btn-join" class="btn btn-secondary">Join</button>
+                </div>
+            </div>
+            <div id="home-status" class="status-msg"></div>
+        </div>
+    </div>
+
+    <!-- Lobby Screen -->
+    <div id="screen-lobby" class="screen">
+        <div class="container">
+            <h2>Lobby</h2>
+            <div class="room-code-display">
+                <span class="label">Room Code</span>
+                <span id="lobby-room-code" class="code"></span>
+            </div>
+            <div id="player-list" class="player-list"></div>
+            <div class="lobby-actions">
+                <div id="name-entry" class="join-row">
+                    <input type="text" id="input-player-name" class="input" placeholder="Your name" maxlength="16" autocomplete="off">
+                    <button id="btn-set-name" class="btn btn-secondary">Set Name</button>
+                </div>
+                <button id="btn-start" class="btn btn-primary hidden">Start Game</button>
+            </div>
+            <div id="lobby-status" class="status-msg"></div>
+        </div>
+    </div>
+
+    <!-- Question Screen -->
+    <div id="screen-question" class="screen">
+        <div class="container">
+            <div class="round-info">
+                <span id="round-label">Round 1 / 10</span>
+                <span id="timer" class="timer">30</span>
+            </div>
+            <p id="question-text" class="question-text"></p>
+            <p id="question-unit" class="question-unit"></p>
+            <div class="answer-row">
+                <input type="number" id="input-answer" class="input input-answer" placeholder="Your answer" autocomplete="off">
+                <button id="btn-submit-answer" class="btn btn-primary">Lock In</button>
+            </div>
+            <div id="answer-status" class="status-msg"></div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="screen-results" class="screen">
+        <div class="container">
+            <h2 id="results-title">Round Results</h2>
+            <div class="real-answer-box">
+                <span class="label">Actual Answer</span>
+                <span id="real-answer" class="big-number"></span>
+            </div>
+            <div id="round-results" class="results-list"></div>
+            <div class="scoreboard">
+                <h3>Scoreboard</h3>
+                <div id="scoreboard" class="results-list"></div>
+            </div>
+            <button id="btn-next-round" class="btn btn-primary hidden">Next Round</button>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="screen-gameover" class="screen">
+        <div class="container">
+            <h2 class="winner-title" id="winner-title">Game Over</h2>
+            <div id="final-standings" class="results-list"></div>
+            <button id="btn-play-again" class="btn btn-primary">Play Again</button>
+        </div>
+    </div>
+</body>
+</html>

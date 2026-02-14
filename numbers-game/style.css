@@ -1,0 +1,392 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Screens */
+.screen {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.container {
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+}
+
+/* Logo */
+.logo {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #818cf8, #6366f1, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.tagline {
+    color: #64748b;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-primary {
+    background: #6366f1;
+    color: #fff;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background: #4f46e5;
+}
+
+.btn-secondary {
+    background: #1e1e2e;
+    color: #e0e0e0;
+    border: 1px solid #333;
+}
+
+.btn-secondary:hover {
+    background: #2a2a3e;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Inputs */
+.input {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #141414;
+    color: #e0e0e0;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #6366f1;
+}
+
+.input::placeholder {
+    color: #4a4a5a;
+}
+
+.input-answer {
+    font-size: 1.5rem;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.input-answer::-webkit-outer-spin-button,
+.input-answer::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Home */
+.home-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #4a4a5a;
+    font-size: 0.85rem;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #222;
+}
+
+.join-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.join-row .input {
+    flex: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+/* Status */
+.status-msg {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #f87171;
+    min-height: 1.4em;
+}
+
+.status-msg.success {
+    color: #34d399;
+}
+
+/* Lobby */
+.room-code-display {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+}
+
+.room-code-display .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.room-code-display .code {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: #818cf8;
+}
+
+.player-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.player-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 8px;
+}
+
+.player-chip .name {
+    font-weight: 600;
+}
+
+.player-chip .badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    font-weight: 600;
+}
+
+.lobby-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Question */
+.round-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.timer {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #818cf8;
+    min-width: 2.5rem;
+    text-align: right;
+}
+
+.timer.urgent {
+    color: #f87171;
+}
+
+.question-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #f1f5f9;
+    margin-bottom: 0.5rem;
+}
+
+.question-unit {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin-bottom: 2rem;
+}
+
+.answer-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.answer-row .input {
+    flex: 1;
+}
+
+.answer-row .btn {
+    width: auto;
+    white-space: nowrap;
+}
+
+/* Results */
+.real-answer-box {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+}
+
+.real-answer-box .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.big-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #34d399;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 8px;
+}
+
+.result-row .rank {
+    font-weight: 700;
+    color: #64748b;
+    min-width: 2rem;
+    text-align: left;
+}
+
+.result-row .name {
+    flex: 1;
+    text-align: left;
+    font-weight: 600;
+}
+
+.result-row .answer {
+    color: #94a3b8;
+    margin-right: 1rem;
+}
+
+.result-row .points {
+    font-weight: 700;
+    color: #818cf8;
+    min-width: 3rem;
+    text-align: right;
+}
+
+.result-row.first-place {
+    border-color: #eab308;
+    background: rgba(234, 179, 8, 0.05);
+}
+
+.scoreboard {
+    margin-top: 1rem;
+}
+
+.scoreboard h3 {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+}
+
+/* Game Over */
+.winner-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #eab308, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .logo {
+        font-size: 2.5rem;
+    }
+
+    .question-text {
+        font-size: 1.2rem;
+    }
+
+    .room-code-display .code {
+        font-size: 2rem;
+    }
+}
