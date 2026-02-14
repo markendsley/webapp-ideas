@@ -722,3 +722,178 @@ $('btn-play-again').addEventListener('click', () => {
         window.location.reload();
     }
 });
+
+// ============================================================
+// THE DOOR — T-REX EASTER EGG
+// ============================================================
+
+$('the-door').addEventListener('click', (e) => {
+    e.stopPropagation();
+    unleashTRex();
+});
+
+let trexUnleashed = false;
+
+function unleashTRex() {
+    if (trexUnleashed) return;
+    trexUnleashed = true;
+
+    const trex = $('trex');
+    const door = $('the-door');
+    const container = document.querySelector('#screen-home .container');
+
+    // Step 1: Door shakes violently
+    door.style.transition = 'none';
+    let doorShakeCount = 0;
+    const doorShake = setInterval(() => {
+        const x = (Math.random() - 0.5) * 12;
+        const y = (Math.random() - 0.5) * 8;
+        door.style.transform = `translate(${x}px, ${y}px)`;
+        doorShakeCount++;
+        if (doorShakeCount > 15) {
+            clearInterval(doorShake);
+            door.style.transform = '';
+            // Step 2: Door flies away
+            launchElement(door, -200, -800, -720);
+            setTimeout(() => beginDestruction(trex, container), 300);
+        }
+    }, 50);
+}
+
+function beginDestruction(trex, container) {
+    // Show T-Rex entering from the right
+    trex.classList.remove('hidden');
+    trex.style.bottom = '0px';
+    trex.style.right = '0px';
+    trex.style.animation = 'trex-enter 0.8s ease-out forwards';
+
+    // Screen shake
+    document.body.classList.add('shake');
+    setTimeout(() => document.body.classList.remove('shake'), 500);
+
+    // Step 3: After T-Rex arrives, smash the UI elements
+    setTimeout(() => {
+        trex.style.animation = 'trex-stomp 0.4s ease-in-out 3';
+
+        // Shake screen with each stomp
+        let stompCount = 0;
+        const stompShake = setInterval(() => {
+            document.body.classList.add('shake');
+            setTimeout(() => document.body.classList.remove('shake'), 400);
+            stompCount++;
+            if (stompCount >= 3) clearInterval(stompShake);
+        }, 400);
+
+        // Launch UI elements one by one
+        const targets = container.querySelectorAll('.logo, .tagline, .btn-primary, .divider, .join-row, .status-msg');
+        const targetArray = Array.from(targets);
+
+        targetArray.forEach((el, i) => {
+            setTimeout(() => {
+                const dirX = (Math.random() - 0.5) * 1200;
+                const dirY = -300 - Math.random() * 600;
+                const rot = (Math.random() - 0.5) * 1080;
+                launchElement(el, dirX, dirY, rot);
+
+                // Shake on impact
+                document.body.classList.add('shake');
+                setTimeout(() => document.body.classList.remove('shake'), 300);
+            }, i * 200);
+        });
+
+        // Step 4: After destruction, T-Rex turns to face the viewer
+        setTimeout(() => {
+            turnToFaceViewer(trex);
+        }, targetArray.length * 200 + 600);
+
+    }, 900);
+}
+
+function launchElement(el, dx, dy, rotation) {
+    const rect = el.getBoundingClientRect();
+
+    // Clone position to fixed
+    el.classList.add('debris');
+    el.style.left = rect.left + 'px';
+    el.style.top = rect.top + 'px';
+    el.style.width = rect.width + 'px';
+    el.style.margin = '0';
+
+    // Force reflow
+    el.offsetHeight;
+
+    // Animate with JS for physics feel
+    let vx = dx / 60;
+    let vy = dy / 60;
+    let vr = rotation / 60;
+    const gravity = 0.8;
+    let x = 0, y = 0, r = 0;
+    let frame = 0;
+
+    function animateDebris() {
+        vy += gravity;
+        x += vx;
+        y += vy;
+        r += vr;
+        vx *= 0.99;
+        vr *= 0.98;
+        frame++;
+
+        el.style.transform = `translate(${x}px, ${y}px) rotate(${r}deg)`;
+        el.style.opacity = Math.max(0, 1 - frame / 80);
+
+        if (frame < 80) {
+            requestAnimationFrame(animateDebris);
+        } else {
+            el.style.display = 'none';
+        }
+    }
+    requestAnimationFrame(animateDebris);
+}
+
+function turnToFaceViewer(trex) {
+    // Move T-Rex to center
+    trex.style.animation = 'none';
+    trex.style.transition = 'all 0.8s ease-in-out';
+    trex.style.left = '50%';
+    trex.style.right = 'auto';
+    trex.style.bottom = '10%';
+    trex.style.transform = 'translateX(-50%)';
+
+    setTimeout(() => {
+        // Scale up and face the viewer
+        trex.style.transition = 'transform 0.6s ease-in-out';
+        trex.style.transform = 'translateX(-50%) scale(1.8)';
+
+        // Open the jaw
+        const jawBottom = trex.querySelector('.trex-jaw-bottom');
+        jawBottom.style.animation = 'jaw-open 0.4s ease-out 0.3s forwards';
+
+        // Add a ROAR effect — screen goes red briefly
+        setTimeout(() => {
+            const roar = document.createElement('div');
+            roar.style.cssText = `
+                position: fixed; inset: 0; z-index: 9998;
+                background: radial-gradient(circle at 50% 60%, transparent 30%, rgba(180, 20, 20, 0.3) 100%);
+                pointer-events: none;
+                animation: roar-flash 2s ease-out forwards;
+            `;
+
+            // Add roar keyframes dynamically
+            if (!document.querySelector('#roar-style')) {
+                const style = document.createElement('style');
+                style.id = 'roar-style';
+                style.textContent = `
+                    @keyframes roar-flash {
+                        0% { opacity: 0; }
+                        20% { opacity: 1; }
+                        100% { opacity: 0.6; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(roar);
+        }, 600);
+    }, 800);
+}

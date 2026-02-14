@@ -453,6 +453,321 @@ body:has(.player-overlay:not(.hidden)) .screen {
     padding-top: 4rem;
 }
 
+/* ============================================
+   THE DOOR
+   ============================================ */
+.door-wrapper {
+    margin-top: 2.5rem;
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.2s;
+    image-rendering: pixelated;
+}
+
+.door-wrapper:hover {
+    transform: scale(1.03);
+}
+
+.door-wrapper:hover .door-surface {
+    border-color: #5a4a3a;
+}
+
+.door-frame {
+    background: #2a2218;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.6),
+        inset 0 0 8px rgba(0, 0, 0, 0.4);
+    image-rendering: pixelated;
+}
+
+.door-surface {
+    width: 120px;
+    height: 200px;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #3d2e1e 0px, #3d2e1e 8px,
+            #4a3828 8px, #4a3828 16px
+        );
+    border: 4px solid #4a3828;
+    border-radius: 2px;
+    position: relative;
+    image-rendering: pixelated;
+    transition: border-color 0.2s;
+}
+
+.door-panel {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    height: 48px;
+    border: 4px solid #2a2218;
+    background: #35281a;
+    image-rendering: pixelated;
+}
+
+.door-panel.top-panel {
+    top: 20px;
+}
+
+.door-panel.bottom-panel {
+    bottom: 20px;
+}
+
+.door-knob {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background: #b8960c;
+    border-radius: 2px;
+    box-shadow:
+        inset -2px -2px 0 #8a700a,
+        inset 2px 2px 0 #d4af0e;
+    image-rendering: pixelated;
+}
+
+.door-hinge {
+    position: absolute;
+    left: 4px;
+    width: 8px;
+    height: 16px;
+    background: #6b6b6b;
+    border-radius: 1px;
+    box-shadow:
+        inset -2px 0 0 #4a4a4a,
+        inset 2px 0 0 #888;
+    image-rendering: pixelated;
+}
+
+.door-hinge.hinge-top { top: 24px; }
+.door-hinge.hinge-bottom { bottom: 24px; }
+
+/* ============================================
+   T-REX
+   ============================================ */
+.trex {
+    position: fixed;
+    z-index: 9999;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+.trex.hidden {
+    display: none;
+}
+
+.trex-body {
+    position: relative;
+    width: 280px;
+    height: 240px;
+}
+
+/* Head */
+.trex-head {
+    position: absolute;
+    top: 0;
+    left: 160px;
+    width: 100px;
+    transform-origin: left bottom;
+}
+
+.trex-jaw-top {
+    width: 100px;
+    height: 40px;
+    background: #2d5a3a;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    box-shadow:
+        inset -4px 0 0 #1e3d28,
+        inset 4px 4px 0 #3a7a4e;
+    transition: transform 0.3s;
+}
+
+.trex-jaw-bottom {
+    width: 96px;
+    height: 24px;
+    background: #245030;
+    margin-left: 2px;
+    border-radius: 0 0 4px 4px;
+    position: relative;
+    box-shadow:
+        inset -4px 0 0 #1a3822,
+        inset 4px 0 0 #2d6038;
+    transform-origin: top left;
+    transition: transform 0.3s;
+}
+
+.trex-eye {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    width: 12px;
+    height: 12px;
+    background: #f5e642;
+    border-radius: 2px;
+    box-shadow: inset 4px 0 0 #111;
+}
+
+.trex-teeth-top {
+    position: absolute;
+    bottom: 0;
+    left: 8px;
+    right: 8px;
+    height: 8px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #e8e0d0 0px, #e8e0d0 6px,
+            transparent 6px, transparent 10px
+        );
+    image-rendering: pixelated;
+}
+
+.trex-teeth-bottom {
+    position: absolute;
+    top: 0;
+    left: 8px;
+    right: 8px;
+    height: 8px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #d8d0c0 0px, #d8d0c0 6px,
+            transparent 6px, transparent 10px
+        );
+    image-rendering: pixelated;
+}
+
+/* Neck */
+.trex-neck {
+    position: absolute;
+    top: 40px;
+    left: 130px;
+    width: 50px;
+    height: 60px;
+    background: #2d5a3a;
+    clip-path: polygon(0% 0%, 100% 0%, 60% 100%, 0% 100%);
+    box-shadow: inset -4px 0 0 #1e3d28;
+}
+
+/* Torso */
+.trex-torso {
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    width: 120px;
+    height: 100px;
+    background: #2d5a3a;
+    border-radius: 8px 16px 8px 8px;
+    box-shadow:
+        inset -6px 0 0 #1e3d28,
+        inset 6px 6px 0 #3a7a4e;
+    position: absolute;
+}
+
+/* Arms (tiny!) */
+.trex-arm {
+    position: absolute;
+    width: 16px;
+    height: 28px;
+    background: #2d5a3a;
+    border-radius: 2px;
+    box-shadow: inset -2px 0 0 #1e3d28;
+}
+
+.trex-arm.arm-left {
+    top: 15px;
+    right: -8px;
+}
+
+.trex-arm.arm-right {
+    top: 25px;
+    right: -6px;
+}
+
+/* Tail */
+.trex-tail {
+    position: absolute;
+    top: 70px;
+    left: -20px;
+    width: 90px;
+    height: 40px;
+    background: #2d5a3a;
+    clip-path: polygon(100% 0%, 100% 80%, 0% 50%);
+    box-shadow: inset 4px 4px 0 #3a7a4e;
+}
+
+/* Legs */
+.trex-leg {
+    position: absolute;
+    bottom: 0;
+    width: 28px;
+    height: 80px;
+    background: #2d5a3a;
+    border-radius: 0 0 4px 4px;
+    box-shadow:
+        inset -4px 0 0 #1e3d28,
+        inset 4px 0 0 #3a7a4e;
+}
+
+.trex-leg.leg-left { left: 80px; }
+.trex-leg.leg-right { left: 120px; }
+
+/* T-Rex stomp animation */
+@keyframes trex-enter {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes trex-stomp {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-8px) rotate(-1deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(-6px) rotate(1deg); }
+}
+
+@keyframes trex-turn {
+    0% { transform: scaleX(1); }
+    100% { transform: scaleX(-1); }
+}
+
+@keyframes jaw-open {
+    0% { transform: rotate(0deg); }
+    60% { transform: rotate(25deg); }
+    75% { transform: rotate(20deg); }
+    100% { transform: rotate(25deg); }
+}
+
+@keyframes screen-shake {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-8px, 4px); }
+    20% { transform: translate(6px, -6px); }
+    30% { transform: translate(-4px, 8px); }
+    40% { transform: translate(8px, -4px); }
+    50% { transform: translate(-6px, -6px); }
+    60% { transform: translate(4px, 6px); }
+    70% { transform: translate(-8px, -2px); }
+    80% { transform: translate(6px, 4px); }
+    90% { transform: translate(-2px, -8px); }
+}
+
+.shake {
+    animation: screen-shake 0.5s ease-in-out;
+}
+
+/* Flying debris */
+.debris {
+    position: fixed !important;
+    z-index: 9998;
+    transition: none !important;
+    pointer-events: none;
+}
+
 /* Responsive */
 @media (max-width: 500px) {
     .logo {
