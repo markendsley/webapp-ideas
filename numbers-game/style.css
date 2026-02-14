@@ -548,177 +548,584 @@ body:has(.player-overlay:not(.hidden)) .screen {
 .door-hinge.hinge-bottom { bottom: 24px; }
 
 /* ============================================
-   T-REX
+   T-REX — Jurassic Park style, 3 angles
    ============================================ */
+
+/* Skin palette */
+:root {
+    --rex-dark: #3a3024;
+    --rex-mid: #5c4a36;
+    --rex-light: #7a6448;
+    --rex-highlight: #8f7a5e;
+    --rex-shadow: #2a2018;
+    --rex-belly: #6b5f4a;
+    --rex-eye: #d4a017;
+    --rex-pupil: #1a1a0a;
+    --rex-teeth: #e8dcc8;
+    --rex-gum: #8a3030;
+    --rex-tongue: #a04040;
+}
+
 .trex {
     position: fixed;
     z-index: 9999;
     image-rendering: pixelated;
     pointer-events: none;
 }
+.trex.hidden { display: none; }
 
-.trex.hidden {
-    display: none;
+/* Pose switching */
+.trex-pose { display: none; position: relative; }
+.trex-pose.active { display: block; }
+
+/* ---- SIDE VIEW (JP profile — big head, forward lean) ---- */
+.trex-side {
+    width: 380px;
+    height: 320px;
 }
 
-.trex-body {
-    position: relative;
-    width: 280px;
-    height: 240px;
+/* Tail — segmented, thick at base, tapers */
+.rex-tail-s { position: absolute; top: 100px; left: 0; }
+.tail-seg {
+    position: absolute;
+    background: var(--rex-mid);
+    border-radius: 4px;
+    image-rendering: pixelated;
+}
+.tail-seg.t1 { width: 40px; height: 20px; top: 10px; left: 0; background: var(--rex-light); border-radius: 4px 2px 2px 4px; }
+.tail-seg.t2 { width: 36px; height: 28px; top: 6px; left: 36px; }
+.tail-seg.t3 { width: 32px; height: 36px; top: 2px; left: 68px; background: var(--rex-dark); }
+.tail-seg.t4 { width: 28px; height: 44px; top: -2px; left: 96px; background: var(--rex-shadow); }
+
+/* Body — massive barrel chest, JP forward-lean */
+.rex-body-s {
+    position: absolute;
+    top: 68px;
+    left: 110px;
+    width: 140px;
+    height: 120px;
+    background: var(--rex-mid);
+    border-radius: 20px 40px 16px 12px;
+    box-shadow:
+        inset -8px -4px 0 var(--rex-shadow),
+        inset 8px 8px 0 var(--rex-light);
+}
+.rex-ribs {
+    position: absolute;
+    top: 20px; left: 10px;
+    width: 60px; height: 60px;
+    border-right: 4px solid var(--rex-dark);
+    border-radius: 0 12px 12px 0;
+    opacity: 0.3;
+}
+.rex-belly {
+    position: absolute;
+    bottom: 4px; left: 20px;
+    width: 80px; height: 30px;
+    background: var(--rex-belly);
+    border-radius: 0 0 20px 12px;
+    opacity: 0.6;
+}
+/* Tiny arm — iconic JP detail */
+.rex-arm-s {
+    position: absolute;
+    top: 40px; right: -4px;
+    width: 10px; height: 22px;
+    background: var(--rex-mid);
+    border-radius: 2px;
+    transform: rotate(20deg);
+    box-shadow: inset -2px 0 0 var(--rex-shadow);
+}
+.rex-claw-s {
+    position: absolute;
+    bottom: -4px; left: 1px;
+    width: 4px; height: 6px;
+    background: var(--rex-dark);
+    border-radius: 0 0 2px 2px;
 }
 
-/* Head */
-.trex-head {
+/* Neck — thick, muscular, S-curve */
+.rex-neck-s {
+    position: absolute;
+    top: 40px; left: 210px;
+    width: 60px; height: 80px;
+    background: var(--rex-mid);
+    clip-path: polygon(0% 100%, 20% 0%, 100% 0%, 80% 100%);
+    box-shadow: inset -4px 0 0 var(--rex-shadow);
+}
+
+/* Head — oversized, JP proportions (head ~40% of body length) */
+.rex-head-s {
     position: absolute;
     top: 0;
-    left: 160px;
-    width: 100px;
+    left: 230px;
     transform-origin: left bottom;
 }
-
-.trex-jaw-top {
-    width: 100px;
-    height: 40px;
-    background: #2d5a3a;
-    border-radius: 4px 4px 0 0;
+.rex-skull-s {
+    width: 140px;
+    height: 56px;
+    background: var(--rex-mid);
+    border-radius: 8px 28px 4px 8px;
     position: relative;
     box-shadow:
-        inset -4px 0 0 #1e3d28,
-        inset 4px 4px 0 #3a7a4e;
-    transition: transform 0.3s;
+        inset -6px -4px 0 var(--rex-shadow),
+        inset 6px 6px 0 var(--rex-light);
 }
-
-.trex-jaw-bottom {
-    width: 96px;
-    height: 24px;
-    background: #245030;
-    margin-left: 2px;
-    border-radius: 0 0 4px 4px;
+/* Brow ridge — heavy, menacing */
+.rex-brow-s {
+    position: absolute;
+    top: 0; left: 40px;
+    width: 80px; height: 12px;
+    background: var(--rex-dark);
+    border-radius: 4px 12px 0 0;
+}
+/* Eye — amber with slit pupil */
+.rex-eye-s {
+    position: absolute;
+    top: 14px; right: 28px;
+    width: 16px; height: 14px;
+    background: var(--rex-eye);
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(212, 160, 23, 0.4);
+}
+.rex-pupil-s {
+    position: absolute;
+    top: 2px; left: 6px;
+    width: 5px; height: 10px;
+    background: var(--rex-pupil);
+    border-radius: 50%;
+}
+/* Nostril */
+.rex-nostril-s {
+    position: absolute;
+    top: 16px; left: 8px;
+    width: 8px; height: 6px;
+    background: var(--rex-shadow);
+    border-radius: 50%;
+}
+/* Teeth — jagged, large */
+.rex-teeth-upper-s {
+    position: absolute;
+    bottom: -2px; left: 6px; right: 20px;
+    height: 12px;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--rex-teeth) 0px, var(--rex-teeth) 8px,
+        transparent 8px, transparent 12px
+    );
+    clip-path: polygon(
+        0% 0%, 8px 100%, 16px 0%, 24px 100%, 32px 0%, 40px 100%,
+        48px 0%, 56px 100%, 64px 0%, 72px 100%, 80px 0%, 88px 100%,
+        100% 0%
+    );
+}
+/* Jaw — massive, opens wide */
+.rex-jaw-s {
+    width: 130px;
+    height: 28px;
+    background: var(--rex-dark);
+    margin-left: 4px;
+    margin-top: -2px;
+    border-radius: 0 0 8px 4px;
     position: relative;
     box-shadow:
-        inset -4px 0 0 #1a3822,
-        inset 4px 0 0 #2d6038;
+        inset -4px -4px 0 var(--rex-shadow),
+        inset 4px 0 0 var(--rex-mid);
     transform-origin: top left;
     transition: transform 0.3s;
 }
-
-.trex-eye {
+.rex-teeth-lower-s {
     position: absolute;
-    top: 8px;
-    right: 16px;
-    width: 12px;
+    top: -2px; left: 6px; right: 20px;
+    height: 10px;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--rex-teeth) 0px, var(--rex-teeth) 7px,
+        transparent 7px, transparent 11px
+    );
+    clip-path: polygon(
+        0% 100%, 7px 0%, 14px 100%, 21px 0%, 28px 100%, 35px 0%,
+        42px 100%, 49px 0%, 56px 100%, 63px 0%, 70px 100%, 77px 0%,
+        100% 100%
+    );
+}
+.rex-tongue-s {
+    position: absolute;
+    bottom: 4px; left: 20px;
+    width: 40px; height: 8px;
+    background: var(--rex-tongue);
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Legs — powerful, digitigrade */
+.rex-leg-back-s, .rex-leg-front-s {
+    position: absolute;
+    bottom: 0;
+}
+.rex-leg-back-s { left: 120px; }
+.rex-leg-front-s { left: 180px; }
+
+.rex-thigh-s {
+    width: 40px; height: 60px;
+    background: var(--rex-mid);
+    border-radius: 8px;
+    box-shadow: inset -4px 0 0 var(--rex-shadow);
+}
+.rex-shin-s {
+    width: 24px; height: 50px;
+    background: var(--rex-dark);
+    margin-left: 8px;
+    margin-top: -8px;
+    border-radius: 4px;
+}
+.rex-foot-s {
+    width: 44px; height: 16px;
+    background: var(--rex-shadow);
+    margin-left: -8px;
+    margin-top: -4px;
+    border-radius: 4px 12px 4px 4px;
+}
+.rex-toe-s {
+    position: absolute;
+    right: -6px; top: 2px;
+    width: 10px; height: 8px;
+    background: var(--rex-shadow);
+    border-radius: 0 4px 4px 0;
+}
+.rex-leg-back-s .rex-thigh-s { opacity: 0.7; }
+.rex-leg-back-s .rex-shin-s { opacity: 0.7; }
+
+/* ---- 3/4 VIEW (destroying UI) ---- */
+.trex-tq {
+    width: 340px;
+    height: 360px;
+}
+
+.rex-tail-tq {
+    position: absolute;
+    top: 110px; left: 0;
+    width: 80px; height: 30px;
+    background: var(--rex-mid);
+    clip-path: polygon(100% 0%, 100% 100%, 0% 60%);
+    opacity: 0.6;
+}
+.rex-body-tq {
+    position: absolute;
+    top: 80px; left: 60px;
+    width: 160px; height: 140px;
+    background: var(--rex-mid);
+    border-radius: 24px 40px 16px 16px;
+    box-shadow:
+        inset -8px -6px 0 var(--rex-shadow),
+        inset 8px 8px 0 var(--rex-light),
+        inset 0 -20px 20px rgba(0,0,0,0.15);
+}
+.rex-shoulder-tq {
+    position: absolute;
+    top: 10px; right: -8px;
+    width: 40px; height: 50px;
+    background: var(--rex-light);
+    border-radius: 12px;
+    opacity: 0.5;
+}
+.rex-arm-tq {
+    position: absolute;
+    width: 10px; height: 20px;
+    background: var(--rex-mid);
+    border-radius: 2px;
+}
+.left-arm-tq { top: 50px; right: -6px; transform: rotate(15deg); }
+.right-arm-tq { top: 60px; right: 0px; transform: rotate(-10deg); opacity: 0.5; }
+.rex-claw-tq {
+    position: absolute;
+    bottom: -3px; left: 2px;
+    width: 3px; height: 5px;
+    background: var(--rex-dark);
+    border-radius: 0 0 2px 2px;
+}
+
+.rex-neck-tq {
+    position: absolute;
+    top: 40px; left: 170px;
+    width: 60px; height: 90px;
+    background: var(--rex-mid);
+    clip-path: polygon(0% 100%, 30% 0%, 100% 0%, 70% 100%);
+    box-shadow: inset -4px 0 0 var(--rex-shadow);
+}
+
+.rex-head-tq {
+    position: absolute;
+    top: 0; left: 180px;
+    transform-origin: left bottom;
+}
+.rex-skull-tq {
+    width: 130px; height: 60px;
+    background: var(--rex-mid);
+    border-radius: 8px 24px 4px 8px;
+    position: relative;
+    box-shadow:
+        inset -6px -4px 0 var(--rex-shadow),
+        inset 6px 6px 0 var(--rex-light);
+    /* Slight 3/4 perspective skew */
+    transform: perspective(200px) rotateY(-15deg);
+}
+.rex-brow-tq {
+    position: absolute;
+    top: 0; left: 30px;
+    width: 80px; height: 14px;
+    background: var(--rex-dark);
+    border-radius: 4px 12px 0 0;
+}
+.rex-eye-tq {
+    position: absolute;
+    width: 14px; height: 12px;
+    background: var(--rex-eye);
+    border-radius: 50%;
+}
+.eye-far { top: 16px; right: 50px; opacity: 0.4; width: 8px; height: 8px; }
+.eye-near {
+    top: 14px; right: 24px;
+    box-shadow: 0 0 6px rgba(212, 160, 23, 0.5);
+}
+.rex-pupil-tq {
+    position: absolute;
+    top: 1px; left: 5px;
+    width: 4px; height: 9px;
+    background: var(--rex-pupil);
+    border-radius: 50%;
+}
+.rex-teeth-upper-tq {
+    position: absolute;
+    bottom: -2px; left: 6px; right: 16px;
     height: 12px;
-    background: #f5e642;
-    border-radius: 2px;
-    box-shadow: inset 4px 0 0 #111;
+    background: repeating-linear-gradient(90deg, var(--rex-teeth) 0px, var(--rex-teeth) 7px, transparent 7px, transparent 11px);
+    clip-path: polygon(0% 0%, 7px 100%, 14px 0%, 21px 100%, 28px 0%, 35px 100%, 42px 0%, 49px 100%, 56px 0%, 63px 100%, 70px 0%, 77px 100%, 100% 0%);
+}
+.rex-jaw-tq {
+    width: 120px; height: 30px;
+    background: var(--rex-dark);
+    margin-left: 6px; margin-top: -2px;
+    border-radius: 0 0 8px 4px;
+    position: relative;
+    transform: perspective(200px) rotateY(-15deg);
+    transform-origin: top left;
+    transition: transform 0.3s;
+    box-shadow: inset -4px -4px 0 var(--rex-shadow);
+}
+.rex-teeth-lower-tq {
+    position: absolute;
+    top: -2px; left: 6px; right: 16px;
+    height: 10px;
+    background: repeating-linear-gradient(90deg, var(--rex-teeth) 0px, var(--rex-teeth) 6px, transparent 6px, transparent 10px);
+    clip-path: polygon(0% 100%, 6px 0%, 12px 100%, 18px 0%, 24px 100%, 30px 0%, 36px 100%, 42px 0%, 48px 100%, 54px 0%, 60px 100%, 66px 0%, 100% 100%);
 }
 
-.trex-teeth-top {
+.rex-leg-tq {
     position: absolute;
     bottom: 0;
-    left: 8px;
-    right: 8px;
-    height: 8px;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            #e8e0d0 0px, #e8e0d0 6px,
-            transparent 6px, transparent 10px
-        );
-    image-rendering: pixelated;
+    width: 36px;
+}
+.leg-tq-back { left: 80px; }
+.leg-tq-front { left: 150px; }
+.leg-tq-back { opacity: 0.6; }
+.rex-leg-tq .rex-foot-tq {
+    width: 48px; height: 16px;
+    background: var(--rex-shadow);
+    border-radius: 4px 12px 4px 4px;
+    margin-top: 100px;
+}
+.rex-leg-tq::before {
+    content: '';
+    display: block;
+    width: 36px; height: 70px;
+    background: var(--rex-mid);
+    border-radius: 8px;
+    box-shadow: inset -4px 0 0 var(--rex-shadow);
+}
+.rex-leg-tq::after {
+    content: '';
+    display: block;
+    width: 24px; height: 50px;
+    background: var(--rex-dark);
+    margin-left: 6px; margin-top: -8px;
+    border-radius: 4px;
 }
 
-.trex-teeth-bottom {
-    position: absolute;
-    top: 0;
-    left: 8px;
-    right: 8px;
-    height: 8px;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            #d8d0c0 0px, #d8d0c0 6px,
-            transparent 6px, transparent 10px
-        );
-    image-rendering: pixelated;
+/* ---- FRONT VIEW (roaring at viewer) ---- */
+.trex-front {
+    width: 300px;
+    height: 380px;
 }
-
-/* Neck */
-.trex-neck {
+.rex-body-f {
     position: absolute;
+    top: 120px; left: 50%;
+    transform: translateX(-50%);
+    width: 180px; height: 140px;
+    background: var(--rex-mid);
+    border-radius: 40px 40px 20px 20px;
+    box-shadow:
+        inset 0 -8px 0 var(--rex-shadow),
+        inset 0 8px 0 var(--rex-light),
+        inset 0 -30px 30px rgba(0,0,0,0.2);
+}
+.rex-chest-f {
+    position: absolute;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    width: 100px; height: 80px;
+    background: var(--rex-belly);
+    border-radius: 30px;
+    opacity: 0.4;
+}
+.rex-arm-f {
+    position: absolute;
+    width: 12px; height: 24px;
+    background: var(--rex-mid);
+    border-radius: 3px;
     top: 40px;
-    left: 130px;
-    width: 50px;
-    height: 60px;
-    background: #2d5a3a;
-    clip-path: polygon(0% 0%, 100% 0%, 60% 100%, 0% 100%);
-    box-shadow: inset -4px 0 0 #1e3d28;
+}
+.arm-f-left { left: -8px; transform: rotate(-15deg); }
+.arm-f-right { right: -8px; transform: rotate(15deg); }
+.rex-claw-f {
+    position: absolute;
+    bottom: -4px; left: 3px;
+    width: 4px; height: 5px;
+    background: var(--rex-dark);
+    border-radius: 0 0 2px 2px;
 }
 
-/* Torso */
-.trex-torso {
+.rex-neck-f {
     position: absolute;
-    top: 60px;
-    left: 60px;
-    width: 120px;
-    height: 100px;
-    background: #2d5a3a;
-    border-radius: 8px 16px 8px 8px;
+    top: 70px; left: 50%;
+    transform: translateX(-50%);
+    width: 100px; height: 60px;
+    background: var(--rex-mid);
+    border-radius: 20px 20px 0 0;
+    box-shadow: inset 0 4px 0 var(--rex-light);
+}
+
+.rex-head-f {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    transform-origin: center bottom;
+}
+.rex-skull-f {
+    width: 160px; height: 72px;
+    background: var(--rex-mid);
+    border-radius: 20px 20px 8px 8px;
+    position: relative;
     box-shadow:
-        inset -6px 0 0 #1e3d28,
-        inset 6px 6px 0 #3a7a4e;
+        inset 0 -6px 0 var(--rex-shadow),
+        inset 0 6px 0 var(--rex-light),
+        inset -6px 0 0 var(--rex-shadow),
+        inset 6px 0 0 var(--rex-shadow);
+}
+.rex-brow-f {
     position: absolute;
+    top: 0; left: 10px; right: 10px;
+    height: 16px;
+    background: var(--rex-dark);
+    border-radius: 12px 12px 0 0;
 }
-
-/* Arms (tiny!) */
-.trex-arm {
+.rex-eye-f {
     position: absolute;
-    width: 16px;
-    height: 28px;
-    background: #2d5a3a;
-    border-radius: 2px;
-    box-shadow: inset -2px 0 0 #1e3d28;
+    top: 20px;
+    width: 20px; height: 16px;
+    background: var(--rex-eye);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(212, 160, 23, 0.6);
 }
-
-.trex-arm.arm-left {
-    top: 15px;
-    right: -8px;
-}
-
-.trex-arm.arm-right {
-    top: 25px;
-    right: -6px;
-}
-
-/* Tail */
-.trex-tail {
+.eye-f-left { left: 20px; }
+.eye-f-right { right: 20px; }
+.rex-pupil-f {
     position: absolute;
-    top: 70px;
-    left: -20px;
-    width: 90px;
-    height: 40px;
-    background: #2d5a3a;
-    clip-path: polygon(100% 0%, 100% 80%, 0% 50%);
-    box-shadow: inset 4px 4px 0 #3a7a4e;
+    top: 2px; left: 50%;
+    transform: translateX(-50%);
+    width: 6px; height: 12px;
+    background: var(--rex-pupil);
+    border-radius: 50%;
+}
+.rex-teeth-upper-f {
+    position: absolute;
+    bottom: -4px; left: 12px; right: 12px;
+    height: 14px;
+    background: repeating-linear-gradient(90deg, var(--rex-teeth) 0px, var(--rex-teeth) 8px, transparent 8px, transparent 13px);
+    clip-path: polygon(0% 0%, 8px 100%, 16px 0%, 24px 100%, 32px 0%, 40px 100%, 48px 0%, 56px 100%, 64px 0%, 72px 100%, 80px 0%, 88px 100%, 96px 0%, 104px 100%, 112px 0%, 120px 100%, 100% 0%);
 }
 
-/* Legs */
-.trex-leg {
+.rex-jaw-f {
+    width: 150px; height: 40px;
+    background: var(--rex-dark);
+    margin: -4px auto 0;
+    border-radius: 0 0 12px 12px;
+    position: relative;
+    transform-origin: top center;
+    transition: transform 0.4s;
+    box-shadow:
+        inset 0 -4px 0 var(--rex-shadow),
+        inset -4px 0 0 var(--rex-shadow),
+        inset 4px 0 0 var(--rex-shadow);
+}
+.rex-teeth-lower-f {
+    position: absolute;
+    top: -4px; left: 12px; right: 12px;
+    height: 12px;
+    background: repeating-linear-gradient(90deg, var(--rex-teeth) 0px, var(--rex-teeth) 7px, transparent 7px, transparent 12px);
+    clip-path: polygon(0% 100%, 7px 0%, 14px 100%, 21px 0%, 28px 100%, 35px 0%, 42px 100%, 49px 0%, 56px 100%, 63px 0%, 70px 100%, 77px 0%, 84px 100%, 91px 0%, 98px 100%, 105px 0%, 100% 100%);
+}
+.rex-mouth-f {
+    position: absolute;
+    top: 8px; left: 20px; right: 20px;
+    height: 20px;
+    background: var(--rex-gum);
+    border-radius: 0 0 8px 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.rex-mouth-f::after {
+    content: '';
+    position: absolute;
+    bottom: 2px; left: 50%;
+    transform: translateX(-50%);
+    width: 50px; height: 10px;
+    background: var(--rex-tongue);
+    border-radius: 6px;
+}
+
+.rex-leg-f {
     position: absolute;
     bottom: 0;
-    width: 28px;
-    height: 80px;
-    background: #2d5a3a;
-    border-radius: 0 0 4px 4px;
-    box-shadow:
-        inset -4px 0 0 #1e3d28,
-        inset 4px 0 0 #3a7a4e;
+    width: 40px;
+}
+.leg-f-left { left: 50px; }
+.leg-f-right { right: 50px; }
+.rex-leg-f::before {
+    content: '';
+    display: block;
+    width: 40px; height: 80px;
+    background: var(--rex-mid);
+    border-radius: 8px;
+    box-shadow: inset -4px 0 0 var(--rex-shadow), inset 4px 0 0 var(--rex-light);
+}
+.rex-leg-f::after {
+    content: '';
+    display: block;
+    width: 28px; height: 50px;
+    background: var(--rex-dark);
+    margin: -8px auto 0;
+    border-radius: 4px;
+}
+.rex-foot-f {
+    width: 52px; height: 16px;
+    background: var(--rex-shadow);
+    border-radius: 8px;
+    margin: -4px auto 0;
 }
 
-.trex-leg.leg-left { left: 80px; }
-.trex-leg.leg-right { left: 120px; }
-
-/* T-Rex stomp animation */
+/* ---- ANIMATIONS ---- */
 @keyframes trex-enter {
     0% { transform: translateX(100vw); }
     100% { transform: translateX(0); }
@@ -726,34 +1133,49 @@ body:has(.player-overlay:not(.hidden)) .screen {
 
 @keyframes trex-stomp {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-8px) rotate(-1deg); }
+    15% { transform: translateY(-12px) rotate(-2deg); }
+    30% { transform: translateY(4px) rotate(1deg); }
     50% { transform: translateY(0) rotate(0deg); }
-    75% { transform: translateY(-6px) rotate(1deg); }
+    65% { transform: translateY(-10px) rotate(1deg); }
+    80% { transform: translateY(4px) rotate(-1deg); }
 }
 
-@keyframes trex-turn {
-    0% { transform: scaleX(1); }
-    100% { transform: scaleX(-1); }
-}
-
-@keyframes jaw-open {
+@keyframes jaw-open-side {
     0% { transform: rotate(0deg); }
-    60% { transform: rotate(25deg); }
-    75% { transform: rotate(20deg); }
-    100% { transform: rotate(25deg); }
+    50% { transform: rotate(18deg); }
+    70% { transform: rotate(14deg); }
+    100% { transform: rotate(18deg); }
+}
+
+@keyframes jaw-open-front {
+    0% { transform: perspective(100px) rotateX(0deg); }
+    50% { transform: perspective(100px) rotateX(35deg); }
+    70% { transform: perspective(100px) rotateX(28deg); }
+    100% { transform: perspective(100px) rotateX(35deg); }
+}
+
+@keyframes head-lunge {
+    0% { transform: translateX(0) rotate(0deg); }
+    40% { transform: translateX(20px) rotate(-5deg); }
+    100% { transform: translateX(0) rotate(0deg); }
 }
 
 @keyframes screen-shake {
     0%, 100% { transform: translate(0, 0); }
-    10% { transform: translate(-8px, 4px); }
-    20% { transform: translate(6px, -6px); }
-    30% { transform: translate(-4px, 8px); }
-    40% { transform: translate(8px, -4px); }
-    50% { transform: translate(-6px, -6px); }
-    60% { transform: translate(4px, 6px); }
-    70% { transform: translate(-8px, -2px); }
-    80% { transform: translate(6px, 4px); }
-    90% { transform: translate(-2px, -8px); }
+    10% { transform: translate(-10px, 5px); }
+    20% { transform: translate(8px, -8px); }
+    30% { transform: translate(-6px, 10px); }
+    40% { transform: translate(10px, -6px); }
+    50% { transform: translate(-8px, -8px); }
+    60% { transform: translate(6px, 8px); }
+    70% { transform: translate(-10px, -4px); }
+    80% { transform: translate(8px, 6px); }
+    90% { transform: translate(-4px, -10px); }
+}
+
+@keyframes trex-breathe {
+    0%, 100% { transform: translateX(-50%) scale(1.8); }
+    50% { transform: translateX(-50%) scale(1.85); }
 }
 
 .shake {
