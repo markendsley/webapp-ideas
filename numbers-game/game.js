@@ -734,10 +734,9 @@ $('the-door').addEventListener('click', (e) => {
 
 let trexUnleashed = false;
 
-function setTRexPose(poseName) {
-    document.querySelectorAll('.trex-pose').forEach(p => p.classList.remove('active'));
-    const pose = document.getElementById('trex-' + poseName);
-    if (pose) pose.classList.add('active');
+function setTRexImage(name) {
+    const img = $('trex-img');
+    if (img) img.src = 'Images/' + name;
 }
 
 function unleashTRex() {
@@ -748,8 +747,8 @@ function unleashTRex() {
     const door = $('the-door');
     const container = document.querySelector('#screen-home .container');
 
-    // Start with side view
-    setTRexPose('side');
+    // Start with side view facing left (toward UI)
+    setTRexImage('T-Rex-Side-Facing-Left.png');
 
     // Step 1: Door shakes violently — something is behind it
     door.style.transition = 'none';
@@ -770,8 +769,8 @@ function unleashTRex() {
 }
 
 function beginDestruction(trex, container) {
-    // T-Rex enters from the right in SIDE VIEW (classic JP profile)
-    setTRexPose('side');
+    // T-Rex enters from the right facing left
+    setTRexImage('T-Rex-Side-Facing-Left.png');
     trex.classList.remove('hidden');
     trex.style.bottom = '0px';
     trex.style.right = '0px';
@@ -781,20 +780,9 @@ function beginDestruction(trex, container) {
     document.body.classList.add('shake');
     setTimeout(() => document.body.classList.remove('shake'), 500);
 
-    // Side-view jaw snap as it arrives
+    // Step 2: Stomp and destroy UI elements
     setTimeout(() => {
-        const sideJaw = trex.querySelector('.rex-jaw-s');
-        if (sideJaw) sideJaw.style.animation = 'jaw-open-side 0.3s ease-out forwards';
-    }, 700);
-
-    // Step 2: Switch to 3/4 VIEW — T-Rex turns toward the UI
-    setTimeout(() => {
-        setTRexPose('three-quarter');
         trex.style.animation = 'trex-stomp 0.6s ease-in-out 3';
-
-        // Head lunge toward UI elements
-        const tqHead = trex.querySelector('.rex-head-tq');
-        if (tqHead) tqHead.style.animation = 'head-lunge 0.4s ease-in-out 3';
 
         // Shake screen with each stomp
         let stompCount = 0;
@@ -805,19 +793,12 @@ function beginDestruction(trex, container) {
             if (stompCount >= 3) clearInterval(stompShake);
         }, 600);
 
-        // Open 3/4 jaw
-        setTimeout(() => {
-            const tqJaw = trex.querySelector('.rex-jaw-tq');
-            if (tqJaw) tqJaw.style.animation = 'jaw-open-side 0.4s ease-out forwards';
-        }, 200);
-
         // Launch UI elements — T-Rex is facing them
         const targets = container.querySelectorAll('.logo, .tagline, .btn-primary, .divider, .join-row, .status-msg');
         const targetArray = Array.from(targets);
 
         targetArray.forEach((el, i) => {
             setTimeout(() => {
-                // Elements fly away FROM the T-Rex (mostly leftward)
                 const dirX = -400 - Math.random() * 800;
                 const dirY = -200 - Math.random() * 500;
                 const rot = (Math.random() - 0.5) * 1080;
@@ -828,7 +809,7 @@ function beginDestruction(trex, container) {
             }, i * 250);
         });
 
-        // Step 3: Switch to FRONT VIEW — T-Rex faces the viewer
+        // Step 3: Face the viewer
         setTimeout(() => {
             turnToFaceViewer(trex);
         }, targetArray.length * 250 + 800);
@@ -877,8 +858,8 @@ function launchElement(el, dx, dy, rotation) {
 }
 
 function turnToFaceViewer(trex) {
-    // Switch to front view
-    setTRexPose('front');
+    // Switch to front-facing image
+    setTRexImage('T-Rex-Side-Facing-At-You.png');
 
     // Move to center of screen
     trex.style.animation = 'none';
@@ -888,27 +869,12 @@ function turnToFaceViewer(trex) {
     trex.style.bottom = '5%';
     trex.style.transform = 'translateX(-50%) scale(1.2)';
 
-    // Scale up dramatically
+    // Slowly scale up
     setTimeout(() => {
-        trex.style.transition = 'transform 0.8s ease-in-out';
-        trex.style.transform = 'translateX(-50%) scale(1.8)';
+        trex.style.transition = 'transform 3s ease-in-out';
+        trex.style.transform = 'translateX(-50%) scale(2.5)';
 
-        // Open the front-facing jaw wide
-        setTimeout(() => {
-            const frontJaw = trex.querySelector('.rex-jaw-f');
-            if (frontJaw) frontJaw.style.animation = 'jaw-open-front 0.5s ease-out forwards';
-
-            // Show the mouth interior
-            const mouth = trex.querySelector('.rex-mouth-f');
-            if (mouth) mouth.style.opacity = '1';
-
-            // Breathing animation
-            setTimeout(() => {
-                trex.style.animation = 'trex-breathe 2s ease-in-out infinite';
-            }, 500);
-        }, 400);
-
-        // Red vignette ROAR effect
+        // Purple vignette ROAR effect
         setTimeout(() => {
             const roar = document.createElement('div');
             roar.style.cssText = `
