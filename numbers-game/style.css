@@ -606,6 +606,7 @@ body:has(.player-overlay:not(.hidden)) .screen {
 .trex-side {
     width: 380px;
     height: 320px;
+    transform: scaleX(-1); /* Face left toward the UI */
 }
 
 /* Tail — segmented, blocky pixel-art steps */
@@ -856,6 +857,7 @@ body:has(.player-overlay:not(.hidden)) .screen {
 .trex-tq {
     width: 340px;
     height: 360px;
+    transform: scaleX(-1); /* Face left toward the UI */
 }
 
 .rex-tail-tq {
