@@ -913,7 +913,7 @@ function turnToFaceViewer(trex) {
             const roar = document.createElement('div');
             roar.style.cssText = `
                 position: fixed; inset: 0; z-index: 9998;
-                background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(140, 10, 10, 0.4) 100%);
+                background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(90, 20, 130, 0.5) 100%);
                 pointer-events: none;
                 animation: roar-flash 2.5s ease-out forwards;
             `;
