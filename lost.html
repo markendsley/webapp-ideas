@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOST</title>
+    <link rel="stylesheet" href="lost.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="crt-container">
+        <div class="screen-overlay"></div>
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+        <div class="noise"></div>
+        
+        <canvas id="gameCanvas" width="320" height="224"></canvas>
+        
+        <div id="ui-layer">
+            <div id="message-overlay" class="hidden"></div>
+        </div>
+    </div>
+
+    <script src="lost.js"></script>
+</body>
+</html>

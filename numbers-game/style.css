@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -607,6 +609,154 @@ body:has(.player-overlay:not(.hidden)) .screen {
     transition: none !important;
     pointer-events: none;
 }
+
+/* ============================================
+   MINI GAME OVERLAY (LOST)
+   ============================================ */
+
+#minigame-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crt-overlay {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 960px;
+    max-height: 672px;
+    background: #000;
+    box-shadow: 0 0 50px rgba(80, 0, 120, 0.2);
+    font-family: 'VT323', monospace;
+}
+
+.crt-overlay canvas {
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+.crt-overlay .scanlines {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+    background-size: 100% 4px;
+    pointer-events: none; z-index: 10;
+}
+
+.crt-overlay .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(20,0,30,0.6) 90%, rgba(0,0,0,1) 100%);
+    pointer-events: none; z-index: 11;
+}
+
+.crt-overlay .noise {
+    position: absolute; inset: 0;
+    opacity: 0.05; pointer-events: none; z-index: 9;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.game-ui-layer {
+    position: absolute; inset: 0;
+    pointer-events: none; z-index: 20;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.game-message {
+    font-size: 4rem; text-transform: uppercase;
+    text-align: center; text-shadow: 2px 2px 0px #000;
+    color: #dcdcdc;
+}
+
+.text-ominous { color: #a0a0a0; animation: pulse 2s infinite; }
+.text-bloody { 
+    color: #ff0000; font-weight: bold; text-shadow: 4px 4px 0px #300;
+    font-family: 'Courier New', monospace; animation: shake 0.1s infinite;
+}
+
+@keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+/* ============================================
+   JEEP TRIGGER BUTTON
+   ============================================ */
+
+
+#jeep-trigger {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 9000;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+    transform: rotate(15deg);
+}
+
+#jeep-trigger:hover {
+    opacity: 1;
+    transform: rotate(12deg) scale(1.05);
+}
+
+#jeep-trigger.crashed .jeep-icon-body {
+    transform: skewX(-15deg);
+    left: 5px;
+}
+
+#jeep-trigger.crashed .jeep-icon-top {
+    transform: skewX(-20deg) translateY(5px);
+    left: 15px;
+    height: 12px;
+}
+
+#jeep-trigger.crashed .jeep-icon-stripe {
+    display: none;
+}
+
+#jeep-trigger.crashed .wheel-left {
+    transform: rotate(-30deg) translateX(-10px);
+}
+
+#jeep-trigger.crashed .wheel-right {
+    transform: rotate(20deg) translate(5px, -5px);
+    width: 14px;
+    height: 14px;
+}
+
+.jeep-icon-top {
+    position: absolute; bottom: 20px; left: 10px;
+    width: 36px; height: 16px;
+    background: #5d5d5d; border-radius: 2px 2px 0 0;
+}
+
+.jeep-icon-body {
+    position: absolute; bottom: 8px; left: 0;
+    width: 60px; height: 18px;
+    background: #5d5d5d; border-radius: 4px;
+}
+
+.jeep-icon-stripe {
+    position: absolute; bottom: 14px; left: 0;
+    width: 60px; height: 4px; background: #8a2be2;
+}
+
+.jeep-icon-wheel {
+    position: absolute; bottom: 0;
+    width: 16px; height: 16px;
+    background: #1a1a1a; border: 2px solid #333; border-radius: 50%;
+}
+
+.wheel-left { left: 8px; }
+.wheel-right { right: 8px; }
 
 /* Responsive */
 @media (max-width: 500px) {

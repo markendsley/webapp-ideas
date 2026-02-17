@@ -64,6 +64,8 @@ function showScreen(name) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
     screens[name].classList.add('active');
 
+    handleIdleTrigger(name);
+
     // Show overlay during question and results screens
     const showOverlay = (name === 'question' || name === 'results');
     $('player-overlay').classList.toggle('hidden', !showOverlay);
@@ -905,3 +907,87 @@ function turnToFaceViewer(trex) {
         }, 700);
     }, 1000);
 }
+
+// ============================================================
+// MINI-GAME TRIGGERS (The Idle Ghost)
+// ============================================================
+
+let idleTimer = null;
+let activeMiniGame = null;
+
+function handleIdleTrigger(screenName) {
+    // Only trigger in the lobby
+    if (screenName === 'lobby') {
+        resetIdleTimer();
+        document.addEventListener('mousemove', resetIdleTimer);
+        document.addEventListener('keydown', resetIdleTimer);
+    } else {
+        clearTimeout(idleTimer);
+        document.removeEventListener('mousemove', resetIdleTimer);
+        document.removeEventListener('keydown', resetIdleTimer);
+    }
+}
+
+function resetIdleTimer() {
+    clearTimeout(idleTimer);
+    // 66 seconds of silence...
+    idleTimer = setTimeout(triggerLostGame, 66000);
+}
+
+function triggerLostGame() {
+    // Don't trigger if already playing
+    if (activeMiniGame) return;
+    
+    // 1. Load the script dynamically if needed
+    if (typeof LostGame === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'mini-games/lost.js';
+        script.onload = launchLostGame;
+        script.onerror = () => {
+            console.error("Failed to load mini-games/lost.js");
+            alert("Error: Could not load mini-games/lost.js. Make sure the file exists in the 'mini-games' folder.");
+        };
+        document.body.appendChild(script);
+    } else {
+        launchLostGame();
+    }
+}
+
+function launchLostGame() {
+    // 2. Create Container
+    const container = document.createElement('div');
+    container.id = 'minigame-container';
+    document.body.appendChild(container);
+
+    // 3. Start Game
+    activeMiniGame = new LostGame(container, () => {
+        // On Exit
+        container.remove();
+        activeMiniGame = null;
+        // Reset idle timer so it can happen again... if they dare wait
+        resetIdleTimer();
+    });
+
+    activeMiniGame.start();
+}
+
+// ============================================================
+// JEEP BUTTON
+// ============================================================
+
+function addJeepButton() {
+    const btn = document.createElement('div');
+    btn.id = 'jeep-trigger';
+    btn.title = "Don't drive too far...";
+    btn.innerHTML = `
+        <div class="jeep-icon-top"></div>
+        <div class="jeep-icon-body"></div>
+        <div class="jeep-icon-stripe"></div>
+        <div class="jeep-icon-wheel wheel-left"></div>
+        <div class="jeep-icon-wheel wheel-right"></div>
+    `;
+    document.body.appendChild(btn);
+    btn.addEventListener('click', triggerLostGame);
+}
+
+addJeepButton();
